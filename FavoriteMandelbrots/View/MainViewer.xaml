@@ -1,0 +1,48 @@
+﻿<ContentView
+    x:Class="FavoriteMandelbrots.View.MainViewer"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="using:FavoriteMandelbrots.ViewModel"
+    Loaded="ContentView_Loaded"
+    WidthRequest="1100">
+
+    <ContentView.BindingContext>
+        <vm:MainViewerViewModel x:Name="viewModel"/>
+    </ContentView.BindingContext>
+
+    <StackLayout Orientation="Horizontal">
+        <Image x:Name="Image" Source="{Binding CurrentImageSource}" WidthRequest="800" HeightRequest="800">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Buttons="Primary" Tapped="ImageTappedZoomIn"/>
+                <TapGestureRecognizer Buttons="Secondary" Tapped="ImageTappedZoomOut"/>
+            </Image.GestureRecognizers>
+        </Image>
+        <StackLayout x:Name="ButtonsAndPosition" WidthRequest="400" 
+            Margin="5">
+            <StackLayout Spacing="2">
+                <Button x:Name="AddButton" Command="{Binding AddToFavoritesCommand}"
+                    Text="Add to favorites (A)">
+                </Button>
+            </StackLayout>
+            <StackLayout>
+                <Label Text="Shown window:"/>
+                <Label Text="{Binding AreaAsText}"/>
+            </StackLayout>
+            <ListView x:Name="FavoritesList"
+                SelectedItem="{Binding CurrentlySelectedFavorite, Mode=TwoWay}"
+                SelectionMode="Single" Margin="5"
+                ItemsSource="{Binding Favorites}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type vm:AreaViewModel}">
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Button Text="Show" Command="{Binding ShowInMainViewerCommand}"/>
+                                <Label Text="{Binding AsString, Mode=OneWay}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </StackLayout>
+</ContentView>
